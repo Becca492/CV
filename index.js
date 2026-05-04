@@ -28,28 +28,50 @@ function showScreen(name) {
 
 function doLoginCand() {
   const email = document.getElementById("l-email").value.trim();
-  if (!email) {
-    showToast("Entrez votre adresse e-mail");
+  const pass = document.getElementById("l-pass").value.trim();
+
+  if (!email || !pass) {
+    showToast("Veuillez remplir l'email et le mot de passe");
     return;
   }
 
   const acc = ACCOUNTS.find(
     (a) => a.email.toLowerCase() === email.toLowerCase(),
   );
-  setUserUI(
-    acc ? (acc.prenom[0] + acc.nom[0]).toUpperCase() : email[0].toUpperCase(),
-    acc ? acc.prenom + " " + acc.nom : email,
-  );
-  if (acc) {
-    document.getElementById("f-prenom").value = acc.prenom;
-    document.getElementById("f-nom").value = acc.nom;
-    document.getElementById("f-tel").value = acc.tel || "";
-    document.getElementById("f-ville").value = acc.ville || "";
-    document.getElementById("f-poste").value = acc.poste || "";
-    if (acc.niveau) document.getElementById("f-niveau").value = acc.niveau;
+
+  if (!acc) {
+    showToast(
+      "❌ Aucun compte trouvé avec cet email. Créez d'abord un compte.",
+    );
+
+    const emailInput = document.getElementById("l-email");
+    emailInput.style.borderColor = "rgba(224,82,82,0.6)";
+    setTimeout(() => (emailInput.style.borderColor = ""), 2500);
+    return;
   }
+
+  if (acc.pass && acc.pass !== pass) {
+    showToast("❌ Mot de passe incorrect");
+    const passInput = document.getElementById("l-pass");
+    passInput.style.borderColor = "rgba(224,82,82,0.6)";
+    setTimeout(() => (passInput.style.borderColor = ""), 2500);
+    return;
+  }
+
+  setUserUI(
+    (acc.prenom[0] + acc.nom[0]).toUpperCase(),
+    acc.prenom + " " + acc.nom,
+  );
+  document.getElementById("f-prenom").value = acc.prenom;
+  document.getElementById("f-nom").value = acc.nom;
+  document.getElementById("f-tel").value = acc.tel || "";
+  document.getElementById("f-ville").value = acc.ville || "";
+  document.getElementById("f-poste").value = acc.poste || "";
+  if (acc.niveau) document.getElementById("f-niveau").value = acc.niveau;
+
   showScreen("candidat");
   goStep(1);
+  showToast("Bienvenue " + acc.prenom + " !");
 }
 
 function openAdminModal() {
@@ -74,6 +96,9 @@ function setUserUI(av, nm) {
 function logout() {
   document.getElementById("uinfo").style.display = "none";
   document.getElementById("btn-logout").style.display = "none";
+
+  document.getElementById("l-email").value = "";
+  document.getElementById("l-pass").value = "";
   showScreen("login");
 }
 
@@ -163,6 +188,12 @@ function uploadDoc(type) {
     document.getElementById("lm-ico").innerHTML =
       '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9l4 4 7-7" stroke="#25c898" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     document.getElementById("lm-lbl").textContent = "Lettre déposée ✓";
+  }
+}
+
+function handleFileSelect(type, input) {
+  if (input.files && input.files[0]) {
+    uploadDoc(type);
   }
 }
 
@@ -298,9 +329,6 @@ function expLbl(e) {
         ? "Senior"
         : "Expert";
 }
-function stCls(s) {
-  return s === "Nouveau" ? "st-n" : s === "En review" ? "st-r" : "st-a";
-}
 function score(c) {
   return Math.min(
     100,
@@ -373,7 +401,7 @@ function renderTable() {
     return;
   }
   tbody.innerHTML = data
-    .map((c, idx) => {
+    .map((c) => {
       const sc = score(c);
       const ri = CANDS.indexOf(c);
       return `<tr>
@@ -437,8 +465,7 @@ function exportCSV() {
       c.lm ? "Oui" : "Non",
     ].join(","),
   );
-  const csv = [header, ...rows].join("\n");
-  const blob = new Blob(["\uFEFF" + csv], {
+  const blob = new Blob(["\uFEFF" + [header, ...rows].join("\n")], {
     type: "text/csv;charset=utf-8",
   });
   const a = document.createElement("a");
@@ -468,15 +495,13 @@ ${"═".repeat(38)}`;
   a.click();
   showToast("Fiche exportée !");
 }
-/* ── INSCRIPTION CANDIDAT ── */
+
 function openRegisterModal() {
   document.getElementById("register-modal").classList.add("open");
 }
-
 function closeRegisterModal() {
   document.getElementById("register-modal").classList.remove("open");
 }
-
 function doRegister() {
   const prenom = document.getElementById("reg-prenom").value.trim();
   const nom = document.getElementById("reg-nom").value.trim();
@@ -492,13 +517,13 @@ function doRegister() {
     return;
   }
 
-  // Créer le compte
   ACCOUNTS.push({ prenom, nom, email, pass, date: Date.now() });
 
-  // Pré-remplir et rediriger vers le formulaire
   document.getElementById("f-prenom").value = prenom;
   document.getElementById("f-nom").value = nom;
   setUserUI((prenom[0] + nom[0]).toUpperCase(), prenom + " " + nom);
+
+  document.getElementById("l-email").value = email;
 
   closeRegisterModal();
   showScreen("candidat");
@@ -506,7 +531,6 @@ function doRegister() {
   showToast("Compte créé ! Complétez votre profil.");
 }
 
-/* ── INSCRIRE UN CANDIDAT ── */
 function creerCompte() {
   const prenom = document.getElementById("r-prenom").value.trim();
   const nom = document.getElementById("r-nom").value.trim();
@@ -589,8 +613,7 @@ function exportComptes() {
       `"${a.niveau || ""}"`,
     ].join(","),
   );
-  const csv = [header, ...rows].join("\n");
-  const blob = new Blob(["\uFEFF" + csv], {
+  const blob = new Blob(["\uFEFF" + [header, ...rows].join("\n")], {
     type: "text/csv;charset=utf-8",
   });
   const a = document.createElement("a");

@@ -13,7 +13,6 @@
   </head>
   <body>
     <div class="app">
-      <!-- NAVBAR -->
       <nav class="navbar">
         <div class="logo" onclick="showScreen('login')">
           <div class="logo-icon"></div>
@@ -35,7 +34,6 @@
         </div>
       </nav>
 
-      <!-- ════ LOGIN ════ -->
       <div class="screen act" id="screen-login">
         <div class="login-wrap">
           <div class="login-hero">
@@ -144,7 +142,6 @@
         </div>
       </div>
 
-      <!-- ════ CANDIDAT FORM ════ -->
       <div class="screen" id="screen-candidat">
         <div class="page-wrap">
           <button class="btn-back-top" onclick="showScreen('login')">
@@ -182,7 +179,6 @@
             </div>
           </div>
 
-          <!-- STEP 1 -->
           <div id="step1">
             <div class="fcard">
               <div class="sec-hd">Informations personnelles</div>
@@ -237,7 +233,6 @@
             </div>
           </div>
 
-          <!-- STEP 2 -->
           <div id="step2" style="display: none">
             <div class="fcard">
               <div class="sec-hd">Années d'expérience</div>
@@ -352,7 +347,6 @@
             </div>
           </div>
 
-          <!-- STEP 3 -->
           <div id="step3" style="display: none">
             <div class="fcard">
               <div class="sec-hd">Documents à soumettre</div>
@@ -459,7 +453,6 @@
             </div>
           </div>
 
-          <!-- SUCCESS -->
           <div id="step-success" style="display: none">
             <div class="success-wrap">
               <div class="succ-ico">
@@ -602,7 +595,6 @@
         </div>
       </div>
 
-      <!-- ════ MODAL LOGIN ADMIN ════ -->
       <div class="modal-overlay" id="admin-modal">
         <div class="modal-box">
           <button class="modal-close" onclick="closeAdminModal()">×</button>
@@ -632,8 +624,6 @@
         </div>
       </div>
 
-      <!-- ════ MODAL INSCRIPTION CANDIDAT ════ -->
-      <!-- CORRECTION : ce modal est maintenant au bon niveau, dans .app mais EN DEHORS de screen-admin -->
       <div class="modal-overlay" id="register-modal">
         <div class="modal-box">
           <button class="modal-close" onclick="closeRegisterModal()">×</button>
@@ -661,10 +651,8 @@
         </div>
       </div>
 
-      <!-- ════ ADMIN ════ -->
       <div class="screen" id="screen-admin">
         <div class="admin-layout">
-          <!-- SIDEBAR -->
           <div class="admin-sidebar">
             <div class="sidebar-sec">
               <div class="sidebar-sec-lbl">Navigation</div>
@@ -690,9 +678,7 @@
             </div>
           </div>
 
-          <!-- MAIN -->
           <div class="admin-main">
-            <!-- TAB CANDIDATURES -->
             <div id="tab-candidats">
               <div class="admin-topbar">
                 <div>
@@ -791,7 +777,6 @@
               </div>
             </div>
 
-            <!-- TAB INSCRIRE -->
             <div id="tab-inscrire" style="display: none">
               <div class="admin-topbar">
                 <div>
@@ -873,7 +858,6 @@
               </div>
             </div>
 
-            <!-- TAB COMPTES -->
             <div id="tab-comptes" style="display: none">
               <div class="admin-topbar">
                 <div>
