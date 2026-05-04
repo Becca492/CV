@@ -376,6 +376,8 @@ body::before {
   background-position: right 12px center;
   padding-right: 32px;
 }
+
+/* BUTTONS */
 .btn-primary {
   width: 100%;
   padding: 12px;
@@ -393,6 +395,28 @@ body::before {
   background: var(--amber2);
   transform: translateY(-1px);
 }
+
+/* ════ BOUTON GHOST — CORRECTION AJOUTÉE ════ */
+.btn-ghost {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--line2);
+  border-radius: var(--r-sm);
+  color: var(--text2);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: 0.2s;
+  letter-spacing: 0.01em;
+}
+.btn-ghost:hover {
+  background: var(--bg2);
+  border-color: var(--line3);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
 .admin-access-link {
   text-align: center;
   margin-top: 16px;
@@ -408,7 +432,7 @@ body::before {
   color: var(--text2);
 }
 
-/* MODAL ADMIN LOGIN */
+/* MODAL */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -840,9 +864,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: rgba(37, 200, 152, 0.04);
   border-style: solid;
 }
-.cv-zone + .lm-zone {
-  margin-top: 10px;
-}
 .lm-zone {
   border: 1.5px dashed var(--line);
   border-radius: var(--r);
@@ -970,7 +991,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: translateY(-1px);
 }
 
-/* SUCCESS — pas de bouton vers tableau admin */
+/* SUCCESS */
 .success-wrap {
   max-width: 520px;
   margin: 0 auto;
@@ -1022,7 +1043,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   line-height: 1.75;
   margin-bottom: 2rem;
 }
-/* GRILLE DE TÉLÉCHARGEMENTS */
 .dl-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1073,7 +1093,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: var(--amber);
   opacity: 0.7;
 }
-/* bouton retour seulement — plus de bouton vers admin */
 .succ-footer {
   display: flex;
   justify-content: center;
@@ -1391,24 +1410,6 @@ td {
   background: var(--amber-soft);
   border: 1px solid rgba(212, 168, 67, 0.3);
   color: var(--amber);
-}
-.stpill {
-  padding: 3px 9px;
-  border-radius: 30px;
-  font-size: 11px;
-  font-weight: 500;
-}
-.st-n {
-  background: rgba(76, 163, 232, 0.1);
-  color: #7fc0f8;
-}
-.st-r {
-  background: rgba(239, 159, 39, 0.1);
-  color: #ef9f27;
-}
-.st-a {
-  background: rgba(99, 153, 34, 0.15);
-  color: #97c459;
 }
 .score-row {
   display: flex;

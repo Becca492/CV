@@ -1,13 +1,11 @@
-/* ── STATE ── */
-let CANDS = []; // vide — aucun profil préchargé
-let ACCOUNTS = []; // comptes créés par l'admin
+let CANDS = [];
+let ACCOUNTS = [];
 let sortKey = "exp",
   sortDir = "d";
 let cvDone = false,
   lmDone = false;
 let currentCandData = {};
 
-/* ── TOAST ── */
 function showToast(msg) {
   const t = document.getElementById("toast");
   document.getElementById("toast-msg").textContent = msg;
@@ -16,7 +14,6 @@ function showToast(msg) {
   t._t = setTimeout(() => t.classList.remove("show"), 3200);
 }
 
-/* ── SCREENS ── */
 function showScreen(name) {
   document
     .querySelectorAll(".screen")
@@ -29,14 +26,13 @@ function showScreen(name) {
   }
 }
 
-/* ── LOGIN CANDIDAT ── */
 function doLoginCand() {
   const email = document.getElementById("l-email").value.trim();
   if (!email) {
     showToast("Entrez votre adresse e-mail");
     return;
   }
-  // Chercher le compte dans ACCOUNTS
+
   const acc = ACCOUNTS.find(
     (a) => a.email.toLowerCase() === email.toLowerCase(),
   );
@@ -45,7 +41,6 @@ function doLoginCand() {
     acc ? acc.prenom + " " + acc.nom : email,
   );
   if (acc) {
-    // Pré-remplir le formulaire
     document.getElementById("f-prenom").value = acc.prenom;
     document.getElementById("f-nom").value = acc.nom;
     document.getElementById("f-tel").value = acc.tel || "";
@@ -57,7 +52,6 @@ function doLoginCand() {
   goStep(1);
 }
 
-/* ── LOGIN ADMIN ── */
 function openAdminModal() {
   document.getElementById("admin-modal").classList.add("open");
 }
@@ -83,7 +77,6 @@ function logout() {
   showScreen("login");
 }
 
-/* ── STEPS ── */
 function goStep(n) {
   ["step1", "step2", "step3", "step-success"].forEach((id, i) => {
     document.getElementById(id).style.display = i + 1 === n ? "block" : "none";
@@ -117,7 +110,6 @@ function goBackFromSuccess() {
   goStep(3);
 }
 
-/* ── SLIDER ── */
 function updateSlider(v) {
   v = parseInt(v);
   document.getElementById("exp-num").textContent = v;
@@ -137,7 +129,6 @@ function updateSlider(v) {
 }
 updateSlider(0);
 
-/* ── SKILLS ── */
 function addChip(e) {
   if (e.key !== "Enter") return;
   const inp = document.getElementById("chip-inp");
@@ -158,7 +149,6 @@ function getSkills() {
     .filter(Boolean);
 }
 
-/* ── UPLOAD ── */
 function uploadDoc(type) {
   if (type === "cv") {
     cvDone = true;
@@ -176,7 +166,6 @@ function uploadDoc(type) {
   }
 }
 
-/* ── SUBMIT ── */
 function submitProfile() {
   const expVal = parseInt(document.getElementById("exp-slider").value);
   const expLbl =
@@ -219,7 +208,6 @@ function submitProfile() {
     `✦ ${expVal} an${expVal > 1 ? "s" : ""} · ${expLbl}`;
   if (lmDone) document.getElementById("dl-lm-card").style.display = "flex";
 
-  // Ajouter au tableau admin
   const ini = ((prenom[0] || "") + (nom[0] || "")).toUpperCase();
   if (!CANDS.find((c) => c.name === prenom + " " + nom)) {
     CANDS.unshift({
@@ -248,7 +236,6 @@ function updateHeroStat() {
   if (el) el.textContent = CANDS.length;
 }
 
-/* ── TÉLÉCHARGEMENTS ── */
 function downloadFile(name) {
   const a = document.createElement("a");
   a.href =
@@ -286,7 +273,6 @@ Plateforme : TalentCI — Côte d'Ivoire`;
   showToast("Fiche téléchargée !");
 }
 
-/* ── ADMIN TABS ── */
 function adminTab(name) {
   ["candidats", "inscrire", "comptes"].forEach((t) => {
     document.getElementById("tab-" + t).style.display =
@@ -297,7 +283,6 @@ function adminTab(name) {
   if (name === "candidats") renderTable();
 }
 
-/* ── ADMIN TABLE ── */
 function expKey(e) {
   return e <= 2 ? "j" : e <= 5 ? "m" : e <= 10 ? "s" : "e";
 }
@@ -432,7 +417,6 @@ function changeStatus(idx, val) {
   renderTable();
 }
 
-/* ── EXPORT CSV ── */
 function exportCSV() {
   if (!CANDS.length) {
     showToast("Aucune candidature à exporter");
@@ -484,6 +468,43 @@ ${"═".repeat(38)}`;
   a.click();
   showToast("Fiche exportée !");
 }
+/* ── INSCRIPTION CANDIDAT ── */
+function openRegisterModal() {
+  document.getElementById("register-modal").classList.add("open");
+}
+
+function closeRegisterModal() {
+  document.getElementById("register-modal").classList.remove("open");
+}
+
+function doRegister() {
+  const prenom = document.getElementById("reg-prenom").value.trim();
+  const nom = document.getElementById("reg-nom").value.trim();
+  const email = document.getElementById("reg-email").value.trim();
+  const pass = document.getElementById("reg-pass").value.trim();
+
+  if (!prenom || !nom || !email || !pass) {
+    showToast("Tous les champs sont obligatoires");
+    return;
+  }
+  if (ACCOUNTS.find((a) => a.email.toLowerCase() === email.toLowerCase())) {
+    showToast("Un compte existe déjà avec cet email");
+    return;
+  }
+
+  // Créer le compte
+  ACCOUNTS.push({ prenom, nom, email, pass, date: Date.now() });
+
+  // Pré-remplir et rediriger vers le formulaire
+  document.getElementById("f-prenom").value = prenom;
+  document.getElementById("f-nom").value = nom;
+  setUserUI((prenom[0] + nom[0]).toUpperCase(), prenom + " " + nom);
+
+  closeRegisterModal();
+  showScreen("candidat");
+  goStep(1);
+  showToast("Compte créé ! Complétez votre profil.");
+}
 
 /* ── INSCRIRE UN CANDIDAT ── */
 function creerCompte() {
@@ -519,7 +540,6 @@ function creerCompte() {
   setTimeout(() => adminTab("comptes"), 900);
 }
 
-/* ── LISTE DES COMPTES ── */
 function renderAccounts() {
   const list = document.getElementById("accounts-list");
   if (!ACCOUNTS.length) {
@@ -580,7 +600,6 @@ function exportComptes() {
   showToast("Liste exportée !");
 }
 
-/* ── DATE ADMIN ── */
 function setAdminDate() {
   const d = new Date();
   const days = [
@@ -618,5 +637,4 @@ function setAdminDate() {
       d.getFullYear();
 }
 
-/* ── INIT ── */
 updateHeroStat();

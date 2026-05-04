@@ -74,7 +74,6 @@
           <div class="login-panel">
             <h2>Bienvenue</h2>
             <p class="login-sub">Connectez-vous à votre espace candidat</p>
-            <!-- TOGGLE : CANDIDAT UNIQUEMENT -->
             <div class="type-solo">
               <div class="type-solo-item">
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -300,8 +299,8 @@
               <div class="sec-hd">Formation</div>
               <div class="fgrid">
                 <div class="fld">
-                  <label>Niveau d'études</label
-                  ><select id="f-niveau">
+                  <label>Niveau d'études</label>
+                  <select id="f-niveau">
                     <option value="">Sélectionner...</option>
                     <option>Bac +5 / Master</option>
                     <option>Bac +3 / Licence</option>
@@ -357,8 +356,6 @@
           <div id="step3" style="display: none">
             <div class="fcard">
               <div class="sec-hd">Documents à soumettre</div>
-
-              <!-- INPUT FILE CACHÉ - CV -->
               <input
                 type="file"
                 id="cv-file-input"
@@ -397,8 +394,6 @@
                   PDF ou Word — maximum 5 Mo
                 </div>
               </div>
-
-              <!-- INPUT FILE CACHÉ - LETTRE -->
               <input
                 type="file"
                 id="lm-file-input"
@@ -464,7 +459,7 @@
             </div>
           </div>
 
-          <!-- SUCCESS — bouton retour seulement, PAS de lien vers le tableau admin -->
+          <!-- SUCCESS -->
           <div id="step-success" style="display: none">
             <div class="success-wrap">
               <div class="succ-ico">
@@ -597,7 +592,6 @@
                   <div class="dl-arr">↓</div>
                 </div>
               </div>
-              <!-- PAS DE BOUTON VERS LE TABLEAU ADMIN -->
               <div class="succ-footer">
                 <button class="btn-back" onclick="goBackFromSuccess()">
                   ← Modifier mon dossier
@@ -615,8 +609,8 @@
           <h3>Accès recruteur</h3>
           <p class="modal-sub">Réservé aux recruteurs autorisés</p>
           <div class="form-fld">
-            <label>Email</label
-            ><input
+            <label>Email</label>
+            <input
               type="email"
               id="adm-email"
               placeholder="recruteur@talentci.ci"
@@ -624,8 +618,8 @@
             />
           </div>
           <div class="form-fld">
-            <label>Mot de passe</label
-            ><input
+            <label>Mot de passe</label>
+            <input
               type="password"
               id="adm-pass"
               placeholder="••••••••"
@@ -634,6 +628,35 @@
           </div>
           <button class="btn-primary" onclick="doLoginAdmin()">
             Accéder au tableau de bord →
+          </button>
+        </div>
+      </div>
+
+      <!-- ════ MODAL INSCRIPTION CANDIDAT ════ -->
+      <!-- CORRECTION : ce modal est maintenant au bon niveau, dans .app mais EN DEHORS de screen-admin -->
+      <div class="modal-overlay" id="register-modal">
+        <div class="modal-box">
+          <button class="modal-close" onclick="closeRegisterModal()">×</button>
+          <h3>Créer mon compte</h3>
+          <p class="modal-sub">Rejoignez la plateforme TalentCI</p>
+          <div class="form-fld">
+            <label>Prénom *</label>
+            <input type="text" id="reg-prenom" placeholder="Konan" />
+          </div>
+          <div class="form-fld">
+            <label>Nom *</label>
+            <input type="text" id="reg-nom" placeholder="Didier" />
+          </div>
+          <div class="form-fld">
+            <label>Email *</label>
+            <input type="email" id="reg-email" placeholder="votre@email.ci" />
+          </div>
+          <div class="form-fld">
+            <label>Mot de passe *</label>
+            <input type="password" id="reg-pass" placeholder="••••••••" />
+          </div>
+          <button class="btn-primary" onclick="doRegister()">
+            Créer mon compte →
           </button>
         </div>
       </div>
