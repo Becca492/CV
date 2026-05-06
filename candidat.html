@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mon profil — POSTEJOB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="assets/CSS/style.css" />
+    <link rel="stylesheet" href="assets/CSS/candidat.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <nav class="navbar">
+        <div class="logo" onclick="window.location.href = 'index.html'">
+          <div class="logo-icon"></div>
+          <span class="logo-text">POSTE <b>JOB</b></span>
+        </div>
+        <div class="nav-r">
+          <div class="uinfo" id="uinfo" style="display: flex">
+            <div class="uav" id="uav">KD</div>
+            <span class="unm" id="unm">Candidat</span>
+          </div>
+          <button class="btn-xs" onclick="logout()">Déconnexion</button>
+        </div>
+      </nav>
+
+      <div class="page-wrap">
+        <button
+          class="btn-back-top"
+          onclick="window.location.href = 'index.html'"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path
+              d="M9 2L4 7l5 5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Retour à l'accueil
+        </button>
+        <h1 class="page-h">Mon profil candidat</h1>
+        <p class="page-sub">
+          Complétez vos informations pour apparaître dans les recherches des
+          recruteurs
+        </p>
+
+        <div class="steps-bar" id="steps-bar">
+          <div class="s-item">
+            <div class="s-num s-act" id="sn1">1</div>
+            <div class="s-lbl s-act" id="sl1">Informations</div>
+          </div>
+          <div class="s-conn" id="sc1"></div>
+          <div class="s-item">
+            <div class="s-num" id="sn2">2</div>
+            <div class="s-lbl" id="sl2">Expérience</div>
+          </div>
+          <div class="s-conn" id="sc2"></div>
+          <div class="s-item">
+            <div class="s-num" id="sn3">3</div>
+            <div class="s-lbl" id="sl3">Documents</div>
+          </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div id="step1">
+          <div class="fcard">
+            <div class="sec-hd">Informations personnelles</div>
+            <div class="fgrid">
+              <div class="fld">
+                <label>Prénom</label><input id="f-prenom" placeholder="Konan" />
+              </div>
+              <div class="fld">
+                <label>Nom</label><input id="f-nom" placeholder="Didier" />
+              </div>
+              <div class="fld">
+                <label>Téléphone</label
+                ><input id="f-tel" placeholder="+225 07 00 00 00" />
+              </div>
+              <div class="fld">
+                <label>Ville</label><input id="f-ville" placeholder="Abidjan" />
+              </div>
+              <div class="fld span2">
+                <label>Poste souhaité</label
+                ><input
+                  id="f-poste"
+                  placeholder="ex: Développeur Full-Stack, Designer UX..."
+                />
+              </div>
+              <div class="fld span2">
+                <label>Présentation courte</label
+                ><textarea
+                  id="f-bio"
+                  placeholder="Parlez de vous en quelques lignes..."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="f-actions">
+            <button
+              class="btn-back"
+              onclick="window.location.href = 'index.html'"
+            >
+              ← Retour
+            </button>
+            <button class="btn-next" onclick="goStep(2)">
+              Expérience & compétences
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M3 7h8M8 4l3 3-3 3"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" style="display: none">
+          <div class="fcard">
+            <div class="sec-hd">Années d'expérience</div>
+            <div class="exp-box">
+              <div class="exp-top">
+                <div>
+                  <div
+                    style="
+                      font-size: 14px;
+                      font-weight: 500;
+                      color: var(--text);
+                      margin-bottom: 2px;
+                    "
+                  >
+                    Combien d'années d'expérience ?
+                  </div>
+                  <div style="font-size: 12px; color: var(--text3)">
+                    Glissez le curseur — 0 à 20 ans
+                  </div>
+                </div>
+                <div style="text-align: right">
+                  <div class="exp-big" id="exp-num">0</div>
+                  <div class="exp-unit" id="exp-unit">an d'expérience</div>
+                </div>
+              </div>
+              <div class="slider-wrap">
+                <div id="track-fill" style="width: 0%"></div>
+                <input
+                  type="range"
+                  min="0"
+                  max="20"
+                  step="1"
+                  value="0"
+                  id="exp-slider"
+                  oninput="updateSlider(this.value)"
+                />
+              </div>
+              <div class="exp-lvls">
+                <div class="e-lvl lj" id="lj">
+                  <div class="lvl-r">0 – 2 ans</div>
+                  <div class="lvl-n">Junior</div>
+                </div>
+                <div class="e-lvl" id="lm">
+                  <div class="lvl-r">3 – 5 ans</div>
+                  <div class="lvl-n">Intermédiaire</div>
+                </div>
+                <div class="e-lvl" id="ls">
+                  <div class="lvl-r">6 – 10 ans</div>
+                  <div class="lvl-n">Senior</div>
+                </div>
+                <div class="e-lvl" id="le">
+                  <div class="lvl-r">10+ ans</div>
+                  <div class="lvl-n">Expert</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="sec-hd">Formation</div>
+            <div class="fgrid">
+              <div class="fld">
+                <label>Niveau d'études</label>
+                <select id="f-niveau">
+                  <option value="">Sélectionner...</option>
+                  <option>Bac +5 / Master</option>
+                  <option>Bac +3 / Licence</option>
+                  <option>Bac +2 / BTS</option>
+                  <option>Doctorat / PhD</option>
+                  <option>Autre</option>
+                </select>
+              </div>
+              <div class="fld">
+                <label>Dernière entreprise</label
+                ><input id="f-entreprise" placeholder="ex: Orange CI" />
+              </div>
+            </div>
+          </div>
+          <div class="fcard">
+            <div class="sec-hd">Compétences</div>
+            <div
+              class="skills-box"
+              id="skills-box"
+              onclick="document.getElementById('chip-inp').focus()"
+            >
+              <input
+                id="chip-inp"
+                class="chip-inp"
+                placeholder="Taper une compétence + Entrée..."
+                onkeydown="addChip(event)"
+              />
+            </div>
+            <div style="font-size: 11px; color: var(--text3); margin-top: 6px">
+              Appuyez sur Entrée pour ajouter une compétence
+            </div>
+          </div>
+          <div class="f-actions">
+            <button class="btn-back" onclick="goStep(1)">← Retour</button>
+            <button class="btn-next" onclick="goStep(3)">
+              Documents & soumission
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M3 7h8M8 4l3 3-3 3"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step3" style="display: none">
+          <div class="fcard">
+            <div class="sec-hd">Documents à soumettre</div>
+            <input
+              type="file"
+              id="cv-file-input"
+              accept=".pdf,.doc,.docx"
+              style="display: none"
+              onchange="handleFileSelect('cv', this)"
+            />
+            <div
+              class="cv-zone"
+              id="cv-zone"
+              onclick="document.getElementById('cv-file-input').click()"
+            >
+              <div class="cv-ico" id="cv-ico">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <rect
+                    x="4"
+                    y="2"
+                    width="14"
+                    height="18"
+                    rx="2"
+                    stroke="rgba(238,234,224,0.3)"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M8 8h6M8 11h6M8 14h4"
+                    stroke="rgba(238,234,224,0.3)"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="cv-lbl" id="cv-lbl">
+                Cliquez pour sélectionner votre CV
+              </div>
+              <div class="cv-hint" id="cv-hint">PDF ou Word — maximum 5 Mo</div>
+            </div>
+            <input
+              type="file"
+              id="lm-file-input"
+              accept=".pdf,.doc,.docx"
+              style="display: none"
+              onchange="handleFileSelect('lm', this)"
+            />
+            <div
+              class="lm-zone"
+              id="lm-zone"
+              onclick="document.getElementById('lm-file-input').click()"
+              style="margin-top: 10px"
+            >
+              <div class="lm-ico" id="lm-ico">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <rect
+                    x="2"
+                    y="4"
+                    width="14"
+                    height="11"
+                    rx="2"
+                    stroke="rgba(238,234,224,0.3)"
+                    stroke-width="1.3"
+                  />
+                  <path
+                    d="M2 6.5l7 4.5 7-4.5"
+                    stroke="rgba(238,234,224,0.3)"
+                    stroke-width="1.3"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="lm-lbl" id="lm-lbl">
+                Lettre de motivation
+                <span
+                  style="font-size: 11px; font-weight: 300; color: var(--text3)"
+                  >(optionnel)</span
+                >
+              </div>
+              <div class="lm-hint" id="lm-hint">PDF ou Word — maximum 5 Mo</div>
+            </div>
+          </div>
+          <div class="f-actions">
+            <button class="btn-back" onclick="goStep(2)">← Retour</button>
+            <button class="btn-submit" onclick="submitProfile()">
+              Soumettre mon profil
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M2 7l4 4 6-6"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="step-success" style="display: none">
+          <div class="success-wrap">
+            <div class="succ-ico">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path
+                  d="M6 14.5l6 6 11-12"
+                  stroke="#25c898"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 class="succ-h">Profil soumis !</h2>
+            <div class="succ-pill" id="succ-pill">✦ 0 an · Junior</div>
+            <p class="succ-p">
+              Votre dossier a bien été transmis. Téléchargez vos documents
+              ci-dessous pour en garder une copie personnelle.
+            </p>
+            <div class="dl-grid">
+              <div class="dl-card" onclick="downloadFile('CV_candidat.pdf')">
+                <div class="dl-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect
+                      x="3"
+                      y="1"
+                      width="10"
+                      height="14"
+                      rx="1.5"
+                      stroke="rgba(238,234,224,0.35)"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M5 6h6M5 9h6M5 12h3"
+                      stroke="rgba(238,234,224,0.35)"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <div class="dl-info">
+                  <div class="dl-name">Mon CV</div>
+                  <div class="dl-file">CV_candidat.pdf</div>
+                </div>
+                <div class="dl-arr">↓</div>
+              </div>
+              <div
+                class="dl-card"
+                id="dl-lm-card"
+                style="display: none"
+                onclick="downloadFile('Lettre_motivation.pdf')"
+              >
+                <div class="dl-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect
+                      x="1"
+                      y="4"
+                      width="14"
+                      height="9"
+                      rx="1.5"
+                      stroke="rgba(238,234,224,0.35)"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M1 6l7 4 7-4"
+                      stroke="rgba(238,234,224,0.35)"
+                      stroke-width="1.2"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="dl-info">
+                  <div class="dl-name">Lettre de motivation</div>
+                  <div class="dl-file">Lettre_motivation.pdf</div>
+                </div>
+                <div class="dl-arr">↓</div>
+              </div>
+              <div
+                class="dl-card"
+                onclick="downloadFile('Confirmation_depot.pdf')"
+              >
+                <div class="dl-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <circle
+                      cx="8"
+                      cy="8"
+                      r="6"
+                      stroke="#25c898"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M5 8l2 2 4-4"
+                      stroke="#25c898"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div class="dl-info">
+                  <div class="dl-name">Confirmation de dépôt</div>
+                  <div class="dl-file">Confirmation_depot.pdf</div>
+                </div>
+                <div class="dl-arr">↓</div>
+              </div>
+              <div class="dl-card" onclick="downloadProfileTxt()">
+                <div class="dl-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect
+                      x="1.5"
+                      y="1.5"
+                      width="13"
+                      height="13"
+                      rx="1.5"
+                      stroke="rgba(212,168,67,0.6)"
+                      stroke-width="1.2"
+                    />
+                    <path
+                      d="M4 6h8M4 9h5"
+                      stroke="rgba(212,168,67,0.6)"
+                      stroke-width="1.2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <div class="dl-info">
+                  <div class="dl-name">Ma fiche profil</div>
+                  <div class="dl-file">Profil_TalentCI.txt</div>
+                </div>
+                <div class="dl-arr">↓</div>
+              </div>
+            </div>
+            <div class="succ-footer">
+              <button class="btn-back" onclick="goBackFromSuccess()">
+                ← Modifier mon dossier
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">
+      <div class="toast-dot"></div>
+      <span id="toast-msg"></span>
+    </div>
+    <script src="assets/JS/style.js"></script>
+    <script src="assets/JS/candidat.js"></script>
+  </body>
+</html>

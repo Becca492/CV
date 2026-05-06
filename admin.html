@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tableau de bord — POSTEJOB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="assets/CSS/style.css" />
+    <link rel="stylesheet" href="assets/CSS/admin.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <nav class="navbar">
+        <div class="logo" onclick="window.location.href = 'index.html'">
+          <div class="logo-icon"></div>
+          <span class="logo-text">POSTE <b>JOB</b></span>
+        </div>
+        <div class="nav-r">
+          <div class="uinfo" id="uinfo" style="display: flex">
+            <div class="uav">RH</div>
+            <span class="unm">Recruteur RH</span>
+          </div>
+          <button class="btn-xs" onclick="logout()">Déconnexion</button>
+        </div>
+      </nav>
+
+      <div class="admin-layout">
+        <div class="admin-sidebar">
+          <div class="sidebar-sec">
+            <div class="sidebar-sec-lbl">Navigation</div>
+            <div
+              class="sbi act"
+              id="sbi-candidats"
+              onclick="adminTab('candidats')"
+            >
+              <span class="sbi-icon">👥</span>Candidatures
+            </div>
+            <div class="sbi" id="sbi-inscrire" onclick="adminTab('inscrire')">
+              <span class="sbi-icon">✏️</span>Inscrire un candidat
+            </div>
+            <div class="sbi" id="sbi-comptes" onclick="adminTab('comptes')">
+              <span class="sbi-icon">🔑</span>Comptes candidats
+            </div>
+          </div>
+          <div class="sidebar-spacer"></div>
+          <div class="sidebar-sec">
+            <div class="sbi" onclick="logout()">
+              <span class="sbi-icon">🚪</span>Déconnexion
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-main">
+          <div id="tab-candidats">
+            <div class="admin-topbar">
+              <div>
+                <div class="admin-title">Tableau des candidatures</div>
+                <div class="admin-date" id="admin-date"></div>
+              </div>
+              <button class="export-btn" onclick="exportCSV()">
+                ⬇ Exporter CSV
+              </button>
+            </div>
+            <div class="metrics">
+              <div class="mc m1">
+                <div class="mc-lbl">Profils reçus</div>
+                <div class="mc-val" id="m-total">0</div>
+              </div>
+              <div class="mc m2">
+                <div class="mc-lbl">Moy. expérience</div>
+                <div class="mc-val" id="m-avg">—</div>
+                <div class="mc-sub" id="m-sub"></div>
+              </div>
+              <div class="mc m3">
+                <div class="mc-lbl">CV déposés</div>
+                <div class="mc-val" id="m-cv">0</div>
+              </div>
+              <div class="mc m4">
+                <div class="mc-lbl">Acceptés</div>
+                <div class="mc-val" id="m-acc">0</div>
+              </div>
+            </div>
+            <div class="fbar">
+              <input
+                placeholder="Rechercher par nom, poste, ville, compétence..."
+                id="a-search"
+                oninput="renderTable()"
+              />
+              <div class="fbar-div"></div>
+              <select id="a-status" onchange="renderTable()">
+                <option value="">Tous statuts</option>
+                <option>Nouveau</option>
+                <option>En review</option>
+                <option>Accepté</option>
+              </select>
+              <select id="a-exp" onchange="renderTable()">
+                <option value="">Toute exp.</option>
+                <option value="j">Junior 0–2</option>
+                <option value="m">Intermédiaire 3–5</option>
+                <option value="s">Senior 6–10</option>
+                <option value="e">Expert 10+</option>
+              </select>
+              <div class="fbar-div"></div>
+              <div class="sort-btns">
+                <span
+                  style="font-size: 11px; color: var(--text3); padding: 5px 2px"
+                  >Tri :</span
+                >
+                <button class="sp act" id="sp-ed" onclick="setSort('exp', 'd')">
+                  Exp. ↓
+                </button>
+                <button class="sp" id="sp-ea" onclick="setSort('exp', 'a')">
+                  Exp. ↑
+                </button>
+                <button class="sp" id="sp-n" onclick="setSort('name', 'a')">
+                  A–Z
+                </button>
+                <button class="sp" id="sp-d" onclick="setSort('date', 'd')">
+                  Récent
+                </button>
+              </div>
+              <div class="fbar-div"></div>
+              <div class="res-count" id="a-count">0 profil</div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Candidat</th>
+                    <th>Poste</th>
+                    <th>Expérience</th>
+                    <th>Compétences</th>
+                    <th>Score</th>
+                    <th>Statut</th>
+                    <th>Documents</th>
+                    <th>Fiche</th>
+                  </tr>
+                </thead>
+                <tbody id="a-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab Inscrire -->
+          <div id="tab-inscrire" style="display: none">
+            <div class="admin-topbar">
+              <div>
+                <div class="admin-title">Inscrire un candidat</div>
+                <div class="admin-date">Créez un compte manuellement</div>
+              </div>
+            </div>
+            <div class="insc-panel">
+              <h3>Nouveau compte candidat</h3>
+              <p class="insc-sub">
+                Le candidat recevra ses identifiants pour se connecter et
+                compléter son profil.
+              </p>
+              <div class="reg-grid">
+                <div class="form-fld-a">
+                  <label>Prénom *</label
+                  ><input id="r-prenom" placeholder="Konan" />
+                </div>
+                <div class="form-fld-a">
+                  <label>Nom *</label><input id="r-nom" placeholder="Didier" />
+                </div>
+                <div class="form-fld-a span2">
+                  <label>Email *</label
+                  ><input
+                    type="email"
+                    id="r-email"
+                    placeholder="candidat@email.ci"
+                  />
+                </div>
+                <div class="form-fld-a">
+                  <label>Téléphone</label
+                  ><input id="r-tel" placeholder="+225 07 00 00 00" />
+                </div>
+                <div class="form-fld-a">
+                  <label>Ville</label
+                  ><input id="r-ville" placeholder="Abidjan" />
+                </div>
+                <div class="form-fld-a span2">
+                  <label>Poste visé</label>
+                  <select id="r-poste">
+                    <option value="">Sélectionner...</option>
+                    <option>Développeur Full-Stack</option>
+                    <option>Designer UX/UI</option>
+                    <option>Data Analyst</option>
+                    <option>Chef de projet</option>
+                    <option>Ingénieur DevOps</option>
+                    <option>Marketing Digital</option>
+                    <option>Architecte logiciel</option>
+                    <option>Comptable</option>
+                    <option>Commercial</option>
+                    <option>Ingénieur réseau</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div class="form-fld-a">
+                  <label>Niveau d'études</label>
+                  <select id="r-niveau">
+                    <option value="">Sélectionner...</option>
+                    <option>Bac +5 / Master</option>
+                    <option>Bac +3 / Licence</option>
+                    <option>Bac +2 / BTS</option>
+                    <option>Doctorat / PhD</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div class="form-fld-a">
+                  <label>Mot de passe provisoire</label
+                  ><input
+                    type="text"
+                    id="r-pass"
+                    placeholder="ex: TalentCI2026!"
+                  />
+                </div>
+              </div>
+              <button class="btn-jade" onclick="creerCompte()">
+                Créer le compte candidat →
+              </button>
+            </div>
+          </div>
+
+          <div id="tab-comptes" style="display: none">
+            <div class="admin-topbar">
+              <div>
+                <div class="admin-title">Comptes candidats</div>
+                <div class="admin-date">Gérez les accès à la plateforme</div>
+              </div>
+              <button class="export-btn" onclick="exportComptes()">
+                ⬇ Exporter la liste
+              </button>
+            </div>
+            <div class="accounts-list" id="accounts-list">
+              <div class="empty-accs">
+                Aucun compte créé. Utilisez l'onglet "Inscrire un candidat".
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">
+      <div class="toast-dot"></div>
+      <span id="toast-msg"></span>
+    </div>
+    <script src="assets/JS/style.js"></script>
+    <script src="assets/JS/admin.js"></script>
+  </body>
+</html>
