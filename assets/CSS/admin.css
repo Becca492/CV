@@ -3,12 +3,15 @@
   grid-template-columns: 220px 1fr;
   min-height: calc(100vh - 58px);
 }
+
+/* ── Sidebar ── */
 .admin-sidebar {
   background: var(--bg2);
   border-right: 1px solid var(--line);
   padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
 }
 .sidebar-sec {
   padding: 0 1rem;
@@ -40,9 +43,9 @@
   color: var(--text);
 }
 .sbi.act {
-  background: rgba(212, 168, 67, 0.08);
+  background: var(--amber-soft);
   color: var(--amber);
-  border-color: rgba(212, 168, 67, 0.18);
+  border-color: rgba(184, 134, 11, 0.18);
 }
 .sbi-icon {
   font-size: 15px;
@@ -52,6 +55,8 @@
 .sidebar-spacer {
   flex: 1;
 }
+
+/* ── Main ── */
 .admin-main {
   padding: 2rem;
   overflow-y: auto;
@@ -73,6 +78,8 @@
   color: var(--text3);
   margin-top: 3px;
 }
+
+/* ── Metrics ── */
 .metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -86,6 +93,7 @@
   padding: 1.2rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 .mc::after {
   content: "";
@@ -105,7 +113,7 @@
   background: var(--sky);
 }
 .mc.m4::after {
-  background: #97c459;
+  background: #4a9e2f;
 }
 .mc-lbl {
   font-size: 11px;
@@ -125,6 +133,8 @@
   color: var(--jade);
   margin-top: 4px;
 }
+
+/* ── Filtre bar ── */
 .fbar {
   background: var(--bg2);
   border: 1px solid var(--line);
@@ -135,12 +145,13 @@
   gap: 9px;
   align-items: center;
   flex-wrap: wrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 .fbar input,
 .fbar select {
   padding: 7px 12px;
   background: var(--bg3);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line2);
   border-radius: var(--r-sm);
   color: var(--text2);
   font-size: 13px;
@@ -153,14 +164,16 @@
 }
 .fbar input:focus,
 .fbar select:focus {
-  border-color: rgba(212, 168, 67, 0.3);
+  border-color: var(--amber);
+  background: var(--bg2);
+  color: var(--text);
 }
 .fbar input::placeholder {
   color: var(--text3);
 }
 .fbar select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(238,234,224,0.28)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(26,24,20,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 9px center;
   padding-right: 26px;
@@ -177,7 +190,7 @@
 }
 .sp {
   padding: 5px 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line2);
   border-radius: 30px;
   background: transparent;
   color: var(--text3);
@@ -187,7 +200,7 @@
   white-space: nowrap;
 }
 .sp:hover {
-  border-color: var(--line2);
+  border-color: var(--line3);
   color: var(--text2);
 }
 .sp.act {
@@ -202,7 +215,7 @@
 .export-btn {
   padding: 7px 16px;
   background: var(--amber-soft);
-  border: 1px solid rgba(212, 168, 67, 0.25);
+  border: 1px solid rgba(184, 134, 11, 0.22);
   border-radius: var(--r-sm);
   color: var(--amber);
   font-size: 12px;
@@ -211,14 +224,16 @@
   white-space: nowrap;
 }
 .export-btn:hover {
-  background: rgba(212, 168, 67, 0.2);
+  background: rgba(184, 134, 11, 0.18);
 }
+
+/* ── Table ── */
 .table-wrap {
   background: var(--bg2);
   border: 1px solid var(--line);
   border-radius: var(--r);
-
   overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 table {
   width: 100%;
@@ -244,14 +259,14 @@ tbody tr:last-child {
   border-bottom: none;
 }
 tbody tr:hover {
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(0, 0, 0, 0.015);
 }
 td {
   padding: 12px 14px;
-
   color: var(--text);
   vertical-align: middle;
 }
+
 .av-cell {
   display: flex;
   align-items: center;
@@ -278,6 +293,8 @@ td {
   color: var(--text3);
   margin-top: 1px;
 }
+
+/* Badges niveaux */
 .ebadge {
   display: inline-flex;
   align-items: center;
@@ -288,28 +305,29 @@ td {
 }
 .eb-j {
   background: var(--sky-soft);
-  border: 1px solid rgba(76, 163, 232, 0.25);
-  color: #7fc0f8;
+  border: 1px solid rgba(33, 118, 199, 0.2);
+  color: var(--sky);
 }
 .eb-m {
   background: var(--jade-soft);
-  border: 1px solid rgba(37, 200, 152, 0.25);
+  border: 1px solid rgba(15, 158, 114, 0.2);
   color: var(--jade);
 }
 .eb-s {
-  background: rgba(239, 159, 39, 0.08);
-  border: 1px solid rgba(239, 159, 39, 0.25);
-  color: #ef9f27;
+  background: rgba(212, 138, 0, 0.08);
+  border: 1px solid rgba(212, 138, 0, 0.2);
+  color: #c87800;
 }
 .eb-e {
   background: var(--amber-soft);
-  border: 1px solid rgba(212, 168, 67, 0.3);
+  border: 1px solid rgba(184, 134, 11, 0.22);
   color: var(--amber);
 }
+
+/* Score */
 .score-row {
   display: flex;
   align-items: center;
-
   gap: 7px;
 }
 .score-bar {
@@ -327,6 +345,8 @@ td {
   font-size: 11px;
   font-weight: 500;
 }
+
+/* Docs */
 .doc-cell {
   display: flex;
   gap: 5px;
@@ -342,22 +362,22 @@ td {
   cursor: pointer;
   transition: 0.2s;
 }
-
 .doc-btn:hover {
   border-color: var(--amber);
   color: var(--amber);
 }
 .doc-btn.has {
-  border-color: rgba(37, 200, 152, 0.35);
+  border-color: rgba(15, 158, 114, 0.3);
   color: var(--jade);
 }
 .doc-btn.has:hover {
-  background: rgba(37, 200, 152, 0.06);
+  background: var(--jade-soft);
 }
+
 .status-sel {
   padding: 5px 8px;
   background: var(--bg3);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line2);
   border-radius: var(--r-sm);
   color: var(--text2);
   font-size: 11px;
@@ -372,7 +392,6 @@ td {
   background: transparent;
   color: var(--text3);
   font-size: 11px;
-
   cursor: pointer;
   transition: 0.2s;
 }
@@ -386,12 +405,15 @@ td {
   color: var(--text3);
   font-size: 13px;
 }
+
+/* ── Panel inscription ── */
 .insc-panel {
   background: var(--bg2);
   border: 1px solid var(--line);
   border-radius: var(--r);
   padding: 1.75rem;
   max-width: 580px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 .insc-panel h3 {
   font-family: "Fraunces", serif;
@@ -415,7 +437,7 @@ td {
   width: 100%;
   padding: 12px;
   background: var(--jade);
-  color: #000;
+  color: #fff;
   border: none;
   border-radius: var(--r-sm);
   font-size: 14px;
@@ -441,7 +463,7 @@ td {
   width: 100%;
   padding: 10px 13px;
   background: var(--bg3);
-  border: 1px solid var(--line);
+  border: 1px solid var(--line2);
   border-radius: var(--r-sm);
   color: var(--text);
   outline: none;
@@ -450,18 +472,20 @@ td {
 }
 .form-fld-a input:focus,
 .form-fld-a select:focus {
-  border-color: rgba(212, 168, 67, 0.4);
+  border-color: var(--amber);
+  background: var(--bg2);
 }
 .form-fld-a input::placeholder {
   color: var(--text3);
 }
 .form-fld-a select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(238,234,224,0.28)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(26,24,20,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 30px;
 }
 
+/* ── Comptes ── */
 .accounts-list {
   display: flex;
   flex-direction: column;
@@ -481,7 +505,6 @@ td {
   align-items: center;
   gap: 12px;
 }
-
 .acc-av {
   width: 32px;
   height: 32px;
@@ -497,6 +520,7 @@ td {
 .acc-name {
   font-size: 13px;
   font-weight: 500;
+  color: var(--text);
 }
 .acc-email {
   font-size: 11px;
@@ -507,16 +531,15 @@ td {
   border-radius: 20px;
   font-size: 11px;
   background: var(--jade-soft);
-  border: 1px solid rgba(37, 200, 152, 0.2);
+  border: 1px solid rgba(15, 158, 114, 0.2);
   color: var(--jade);
 }
-
 .btn-del {
   padding: 4px 10px;
   background: transparent;
-  border: 1px solid rgba(224, 82, 82, 0.3);
+  border: 1px solid rgba(192, 57, 43, 0.25);
   border-radius: 5px;
-  color: rgba(224, 82, 82, 0.6);
+  color: rgba(192, 57, 43, 0.6);
   font-size: 11px;
   cursor: pointer;
   transition: 0.2s;

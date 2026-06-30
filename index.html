@@ -7,63 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="assets/CSS/style.css" />
     <link rel="stylesheet" href="assets/CSS/index.css" />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
       rel="stylesheet"
     />
-    <style>
-      /* ── Modal plein écran multi-étapes ── */
-      .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
-      .modal-overlay.open { opacity: 1; pointer-events: all; }
-      .modal-box { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); padding: 2.5rem; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; position: relative; }
-      .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text3); font-size: 22px; cursor: pointer; line-height: 1; padding: 4px 8px; }
-      .modal-close:hover { color: var(--text); }
-      .modal-box h3 { font-family: "Fraunces", serif; font-size: 24px; color: var(--text); margin-bottom: 4px; }
-      .modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
-      .form-fld { margin-bottom: 14px; }
-      .form-fld label { display: block; font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
-      .form-fld input, .form-fld select, .form-fld textarea { width: 100%; padding: 10px 13px; background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r-sm); color: var(--text); outline: none; transition: 0.2s; appearance: none; box-sizing: border-box; }
-      .form-fld input:focus, .form-fld select:focus, .form-fld textarea:focus { border-color: rgba(212,168,67,0.4); }
-      .form-fld input::placeholder, .form-fld textarea::placeholder { color: var(--text3); }
-      .form-fld textarea { resize: vertical; min-height: 72px; line-height: 1.65; }
-      .form-fld select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(238,234,224,0.28)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px; }
-      .fgrid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-      /* Progress dots */
-      .reg-progress { display: flex; align-items: center; gap: 0; margin-bottom: 2rem; }
-      .reg-dot { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--line2); background: var(--bg2); display: grid; place-items: center; font-size: 11px; font-weight: 500; color: var(--text3); flex-shrink: 0; transition: 0.3s; }
-      .reg-dot-act { border-color: var(--amber); color: var(--amber); }
-      .reg-dot-done { background: var(--jade); border-color: var(--jade); color: #fff; }
-      .reg-conn { flex: 1; height: 1px; background: var(--line); transition: 0.3s; }
-      .reg-lbl { font-size: 11px; color: var(--text3); margin-left: 7px; }
-      .reg-lbl.act { color: var(--text); }
-      .reg-steps-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-top: 6px; margin-bottom: 1.5rem; }
-
-      /* Slider inside modal */
-      .reg-exp-box { background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 1.25rem; margin-bottom: 14px; position: relative; overflow: hidden; }
-      .reg-exp-box::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--jade), var(--amber)); }
-      .reg-exp-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-      .reg-exp-big { font-family: "Fraunces", serif; font-size: 36px; color: var(--amber); line-height: 1; }
-      .reg-exp-unit { font-size: 11px; color: var(--text3); margin-top: 2px; text-align: right; }
-      .reg-slider-wrap { position: relative; margin-bottom: 0.5rem; }
-      .reg-slider-wrap input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--bg4); border-radius: 2px; outline: none; cursor: pointer; }
-      .reg-slider-wrap input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--amber); border: 3px solid var(--bg); box-shadow: 0 0 0 2px var(--amber); cursor: pointer; }
-      #reg-track-fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 4px; background: linear-gradient(90deg, var(--jade), var(--amber)); border-radius: 2px; pointer-events: none; transition: width 0.12s; }
-
-      /* Chips inside modal */
-      .reg-skills-box { background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px; display: flex; flex-wrap: wrap; gap: 5px; min-height: 42px; cursor: text; transition: 0.2s; margin-bottom: 6px; }
-      .reg-skills-box:focus-within { border-color: rgba(212,168,67,0.35); }
-      .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; background: rgba(212,168,67,0.1); border: 1px solid rgba(212,168,67,0.22); border-radius: 30px; font-size: 12px; color: var(--amber); }
-      .chip span { background: none; border: none; color: rgba(212,168,67,0.5); cursor: pointer; font-size: 15px; line-height: 1; }
-      .chip span:hover { color: var(--amber); }
-      .chip-inp { background: transparent; border: none; outline: none; color: var(--text); font-size: 13px; min-width: 90px; flex: 1; padding: 2px 4px; }
-      .chip-inp::placeholder { color: var(--text3); }
-
-      /* Actions modal */
-      .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; gap: 10px; }
-      .modal-actions .btn-back { flex-shrink: 0; }
-      .modal-actions .btn-next, .modal-actions .btn-submit { flex: 1; }
-    </style>
   </head>
   <body>
     <div class="app">
@@ -83,10 +31,16 @@
           </div>
           <div class="hero-c">
             <div class="hero-badge">
-              <span class="badge-dot"></span>Plateforme de recrutement · Côte d'Ivoire
+              <span class="badge-dot"></span>Plateforme de recrutement · Côte
+              d'Ivoire
             </div>
-            <h1 class="hero-h1">Votre talent mérite<br />d'être <em>découvert.</em></h1>
-            <p class="hero-p">Déposez votre profil et votre CV en quelques minutes. Les meilleurs recruteurs vous trouvent directement.</p>
+            <h1 class="hero-h1">
+              Votre talent mérite<br />d'être <em>découvert.</em>
+            </h1>
+            <p class="hero-p">
+              Déposez votre profil et votre CV en quelques minutes. Les
+              meilleurs recruteurs vous trouvent directement.
+            </p>
             <div class="stats-row">
               <div>
                 <div class="stat-num" id="stat-total">0</div>
@@ -110,8 +64,19 @@
           <div class="type-solo">
             <div class="type-solo-item">
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <circle cx="7.5" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/>
-                <path d="M2 13c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <circle
+                  cx="7.5"
+                  cy="5"
+                  r="3"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                />
+                <path
+                  d="M2 13c0-3 2.5-5 5.5-5s5.5 2 5.5 5"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                  stroke-linecap="round"
+                />
               </svg>
               Candidat
             </div>
@@ -124,12 +89,41 @@
             <label>Mot de passe</label>
             <input type="password" id="l-pass" placeholder="••••••••" />
           </div>
-          <button class="btn-primary" onclick="doLoginCand()">Se connecter →</button>
-          <div style="text-align:center;margin:14px 0;font-size:12px;color:var(--text3);position:relative;">
-            <span style="background:var(--bg);padding:0 10px;position:relative;z-index:1;">ou</span>
-            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--line);"></div>
+          <button class="btn-primary" onclick="doLoginCand()">
+            Se connecter →
+          </button>
+          <div
+            style="
+              text-align: center;
+              margin: 14px 0;
+              font-size: 12px;
+              color: var(--text3);
+              position: relative;
+            "
+          >
+            <span
+              style="
+                background: var(--bg);
+                padding: 0 10px;
+                position: relative;
+                z-index: 1;
+              "
+              >ou</span
+            >
+            <div
+              style="
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: var(--line);
+              "
+            ></div>
           </div>
-          <button class="btn-ghost" onclick="openRegisterModal()">Créer mon compte candidat</button>
+          <button class="btn-ghost" onclick="openRegisterModal()">
+            Créer mon compte candidat
+          </button>
           <div class="admin-access-link">
             <a onclick="openAdminModal()">Accès recruteur</a>
           </div>
@@ -137,7 +131,6 @@
       </div>
     </div>
 
-    <!-- Modal Admin -->
     <div class="modal-overlay" id="admin-modal">
       <div class="modal-box">
         <button class="modal-close" onclick="closeAdminModal()">×</button>
@@ -145,162 +138,52 @@
         <p class="modal-sub">Réservé aux recruteurs autorisés</p>
         <div class="form-fld">
           <label>Email</label>
-          <input type="email" id="adm-email" placeholder="recruteur@talentci.ci" value="admin@talentci.ci"/>
+          <input
+            type="email"
+            id="adm-email"
+            placeholder="recruteur@talentci.ci"
+            value="admin@talentci.ci"
+          />
         </div>
         <div class="form-fld">
           <label>Mot de passe</label>
-          <input type="password" id="adm-pass" placeholder="••••••••" value="••••••••"/>
+          <input
+            type="password"
+            id="adm-pass"
+            placeholder="••••••••"
+            value="••••••••"
+          />
         </div>
-        <button class="btn-primary" onclick="doLoginAdmin()">Accéder au tableau de bord →</button>
+        <button class="btn-primary" onclick="doLoginAdmin()">
+          Accéder au tableau de bord →
+        </button>
       </div>
     </div>
 
-    <!-- Modal Inscription multi-étapes -->
     <div class="modal-overlay" id="register-modal">
       <div class="modal-box">
         <button class="modal-close" onclick="closeRegisterModal()">×</button>
         <h3>Créer mon compte</h3>
-        <p class="modal-sub">Complétez votre profil en une seule fois</p>
-
-        <!-- Progress -->
-        <div class="reg-progress">
-          <div class="reg-dot reg-dot-act" id="reg-dot-1">1</div>
-          <div class="reg-conn"></div>
-          <div class="reg-dot" id="reg-dot-2">2</div>
-          <div class="reg-conn"></div>
-          <div class="reg-dot" id="reg-dot-3">3</div>
+        <p class="modal-sub">Rejoignez la plateforme TalentCI</p>
+        <div class="form-fld">
+          <label>Prénom *</label>
+          <input type="text" id="reg-prenom" placeholder="Konan" />
         </div>
-        <div class="reg-steps-labels">
-          <span>Compte</span>
-          <span style="text-align:center">Expérience</span>
-          <span style="text-align:right">Compétences</span>
+        <div class="form-fld">
+          <label>Nom *</label>
+          <input type="text" id="reg-nom" placeholder="Didier" />
         </div>
-
-        <!-- Étape 1 : Compte + Infos personnelles -->
-        <div id="reg-step-1">
-          <div class="fgrid2">
-            <div class="form-fld">
-              <label>Prénom *</label>
-              <input type="text" id="reg-prenom" placeholder="Konan" />
-            </div>
-            <div class="form-fld">
-              <label>Nom *</label>
-              <input type="text" id="reg-nom" placeholder="Didier" />
-            </div>
-          </div>
-          <div class="form-fld">
-            <label>Email *</label>
-            <input type="email" id="reg-email" placeholder="votre@email.ci" />
-          </div>
-          <div class="form-fld">
-            <label>Mot de passe *</label>
-            <input type="password" id="reg-pass" placeholder="••••••••" />
-          </div>
-          <div class="fgrid2">
-            <div class="form-fld">
-              <label>Téléphone</label>
-              <input type="text" id="reg-tel" placeholder="+225 07 00 00 00" />
-            </div>
-            <div class="form-fld">
-              <label>Ville</label>
-              <input type="text" id="reg-ville" placeholder="Abidjan" />
-            </div>
-          </div>
-          <div class="form-fld">
-            <label>Poste souhaité</label>
-            <input type="text" id="reg-poste" placeholder="ex: Développeur Full-Stack, Designer UX..." />
-          </div>
-          <div class="form-fld">
-            <label>Présentation courte</label>
-            <textarea id="reg-bio" placeholder="Parlez de vous en quelques lignes..."></textarea>
-          </div>
-          <div class="modal-actions">
-            <button class="btn-next" style="width:100%" onclick="regNext()">
-              Expérience & formation
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-left:4px">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
+        <div class="form-fld">
+          <label>Email *</label>
+          <input type="email" id="reg-email" placeholder="votre@email.ci" />
         </div>
-
-        <!-- Étape 2 : Expérience + Formation -->
-        <div id="reg-step-2" style="display:none">
-          <div class="reg-exp-box">
-            <div class="reg-exp-top">
-              <div>
-                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">Années d'expérience</div>
-                <div style="font-size:11px;color:var(--text3)">Glissez le curseur — 0 à 20 ans</div>
-              </div>
-              <div style="text-align:right">
-                <div class="reg-exp-big" id="reg-exp-num">0</div>
-                <div class="reg-exp-unit" id="reg-exp-unit">Junior</div>
-              </div>
-            </div>
-            <div class="reg-slider-wrap">
-              <div id="reg-track-fill" style="width:0%"></div>
-              <input type="range" min="0" max="20" step="1" value="0" id="reg-exp-slider"
-                oninput="updateRegSlider(this.value)" />
-            </div>
-          </div>
-          <div class="form-fld">
-            <label>Niveau d'études</label>
-            <select id="reg-niveau">
-              <option value="">Sélectionner...</option>
-              <option>Bac +5 / Master</option>
-              <option>Bac +3 / Licence</option>
-              <option>Bac +2 / BTS</option>
-              <option>Doctorat / PhD</option>
-              <option>Autre</option>
-            </select>
-          </div>
-          <div class="form-fld">
-            <label>Dernière entreprise</label>
-            <input type="text" id="reg-entreprise" placeholder="ex: Orange CI" />
-          </div>
-          <div class="modal-actions">
-            <button class="btn-back" onclick="regBack()">← Retour</button>
-            <button class="btn-next" onclick="regNext()">
-              Compétences
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-left:4px">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
+        <div class="form-fld">
+          <label>Mot de passe *</label>
+          <input type="password" id="reg-pass" placeholder="••••••••" />
         </div>
-
-        <!-- Étape 3 : Compétences + Soumettre -->
-        <div id="reg-step-3" style="display:none">
-          <div class="form-fld">
-            <label>Compétences</label>
-            <div class="reg-skills-box" id="reg-skills-box"
-              onclick="document.getElementById('reg-chip-inp').focus()">
-              <input id="reg-chip-inp" class="chip-inp"
-                placeholder="Taper une compétence + Entrée..."
-                onkeydown="addRegChip(event)" />
-            </div>
-            <div style="font-size:11px;color:var(--text3);margin-top:4px">Appuyez sur Entrée pour ajouter</div>
-          </div>
-
-          <div style="background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-sm);padding:1rem;margin-bottom:1rem;">
-            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Récapitulatif</div>
-            <div style="font-size:13px;color:var(--text2);line-height:1.8">
-              En soumettant, votre profil sera immédiatement visible par les recruteurs.<br>
-              Vous pourrez le consulter à tout moment en vous reconnectant.
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button class="btn-back" onclick="regBack()">← Retour</button>
-            <button class="btn-submit" onclick="doRegister()">
-              Créer mon profil
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-left:4px">
-                <path d="M2 7l4 4 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
+        <button class="btn-primary" onclick="doRegister()">
+          Créer mon compte →
+        </button>
       </div>
     </div>
 

@@ -15,92 +15,36 @@ public class CandidatsController : ControllerBase
         _context = context;
     }
 
-    // =========================
-    // CREER UN CANDIDAT
-    // =========================
+    // CREATE
     [HttpPost]
-    public IActionResult Create(Candidat candidat)
+    public IActionResult Create(Candidat c)
     {
-        _context.Candidats.Add(candidat);
+        _context.Candidats.Add(c);
 
         _context.SaveChanges();
 
-        return Ok(candidat);
+        return Ok(c);
     }
 
-    // =========================
-    // RECUPERER TOUS
-    // =========================
+    // GET ALL
     [HttpGet]
     public IActionResult GetAll()
     {
-        var candidats = _context.Candidats.ToList();
-
-        return Ok(candidats);
+        return Ok(_context.Candidats.ToList());
     }
 
-    // =========================
-    // RECUPERER PAR ID
-    // =========================
-    [HttpGet("{id}")]
-    public IActionResult GetById(Guid id)
+    // GET BY USER ID
+    [HttpGet("{userId}")]
+    public IActionResult GetByUserId(Guid userId)
     {
-        var candidat = _context.Candidats.FirstOrDefault(x => x.Id == id);
+        var candidat = _context.Candidats
+            .FirstOrDefault(c => c.UserId == userId);
 
         if (candidat == null)
         {
-            return NotFound("Candidat introuvable");
+            return NotFound();
         }
 
         return Ok(candidat);
-    }
-
-    // =========================
-    // MODIFIER
-    // =========================
-    [HttpPut("{id}")]
-    public IActionResult Update(Guid id, Candidat data)
-    {
-        var candidat = _context.Candidats.FirstOrDefault(x => x.Id == id);
-
-        if (candidat == null)
-        {
-            return NotFound("Candidat introuvable");
-        }
-
-        candidat.Telephone = data.Telephone;
-        candidat.Ville = data.Ville;
-        candidat.Poste = data.Poste;
-        candidat.Bio = data.Bio;
-        candidat.Experience = data.Experience;
-        candidat.Niveau = data.Niveau;
-        candidat.Entreprise = data.Entreprise;
-        candidat.Competences = data.Competences;
-        candidat.CvPath = data.CvPath;
-        candidat.LettrePath = data.LettrePath;
-
-        _context.SaveChanges();
-
-        return Ok(candidat);
-    }
-
-    // =========================
-    // SUPPRIMER
-    // =========================
-    [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
-    {
-        var candidat = _context.Candidats.FirstOrDefault(x => x.Id == id);
-
-        if (candidat == null)
-        {
-            return NotFound("Candidat introuvable");
-        }
-
-        _context.Candidats.Remove(candidat);
-
-        _context.SaveChanges();
-
-        return Ok("Candidat supprimé");
     }
 }

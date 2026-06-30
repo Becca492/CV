@@ -30,6 +30,8 @@ public class Candidat
     public string CvPath { get; set; } = string.Empty;
 
     public string LettrePath { get; set; } = string.Empty;
+    
+    public string CvFileName { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

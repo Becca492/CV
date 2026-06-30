@@ -1,17 +1,21 @@
 // ===============================
-// POSTEJOB - CANDIDAT.JS (PROPRE)
+// POSTEJOB - CANDIDAT.JS
 // ===============================
 
 const API_URL = "http://localhost:5294/api";
 
+// ===============================
 // SESSION
+// ===============================
 const session = JSON.parse(localStorage.getItem("pj_session"));
 
 if (!session) {
   window.location.href = "index.html";
 }
 
-// AFFICHAGE USER
+// ===============================
+// USER NAVBAR
+// ===============================
 document.getElementById("unm").textContent = session.prenom + " " + session.nom;
 
 document.getElementById("uav").textContent =
@@ -20,185 +24,383 @@ document.getElementById("uav").textContent =
 // ===============================
 // VARIABLES
 // ===============================
-let currentStep = 1;
+let currentProfil = null;
+
 let skills = [];
 
 // ===============================
-// NAVIGATION STEPS
+// LOAD PROFIL
 // ===============================
-function goStep(step) {
-  document.getElementById("step1").style.display = "none";
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("step3").style.display = "none";
+async function loadProfil() {
+  try {
+    const res = await fetch(`${API_URL}/candidats/${session.id}`);
 
-  document.getElementById("step" + step).style.display = "block";
+    if (res.ok) {
+      currentProfil = await res.json();
 
-  currentStep = step;
-  updateSteps();
-}
+      renderProfil(currentProfil);
+    } else {
+      renderNoProfil();
+    }
+  } catch (err) {
+    console.log(err);
 
-function updateSteps() {
-  for (let i = 1; i <= 3; i++) {
-    document.getElementById("sn" + i).classList.remove("s-act");
-    document.getElementById("sl" + i).classList.remove("s-act");
-  }
-
-  for (let i = 1; i <= currentStep; i++) {
-    document.getElementById("sn" + i).classList.add("s-act");
-    document.getElementById("sl" + i).classList.add("s-act");
+    renderNoProfil();
   }
 }
 
 // ===============================
-// SLIDER EXPERIENCE
+// RENDER PROFIL
+// ===============================
+function renderProfil(p) {
+  const exp = p.experience || 0;
+
+  const level = getLevel(exp);
+
+  const chips = p.competences
+    ? p.competences
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((s) => `<span class="chip-ro">${s}</span>`)
+        .join("")
+    : `<span class="chip-empty">
+         Aucune compétence
+       </span>`;
+
+  document.getElementById("profil-view").innerHTML = `
+
+    <div class="profil-edit-btn">
+      <button class="btn-edit" onclick="openEdit()">
+        Modifier mon profil
+      </button>
+    </div>
+
+    <div class="profil-header">
+
+      <div class="profil-avatar">
+        ${session.prenom.charAt(0)}
+        ${session.nom.charAt(0)}
+      </div>
+
+      <div class="profil-header-right">
+
+        <div class="profil-name">
+          ${p.prenom} ${p.nom}
+        </div>
+
+        <div class="profil-poste">
+          ${p.poste || "Poste non renseigné"}
+        </div>
+
+        <div class="profil-badges">
+
+          <span class="badge badge-level">
+            ✦ ${level}
+          </span>
+
+          ${
+            p.ville
+              ? `<span class="badge badge-info">
+                  📍 ${p.ville}
+                </span>`
+              : ""
+          }
+
+          ${
+            p.telephone
+              ? `<span class="badge badge-info">
+                  📞 ${p.telephone}
+                </span>`
+              : ""
+          }
+
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard">
+
+      <div class="pcard-title">
+        Présentation
+      </div>
+
+      <p class="pcard-bio">
+        ${p.bio || "Aucune présentation"}
+      </p>
+
+    </div>
+
+    <div class="pcard">
+
+      <div class="pcard-title">
+        Informations
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+          <label>Niveau</label>
+          <span>${p.niveau || "-"}</span>
+        </div>
+
+        <div class="info-item">
+          <label>Entreprise</label>
+          <span>${p.entreprise || "-"}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pcard">
+
+      <div class="pcard-title">
+        Expérience
+      </div>
+
+      <div class="exp-num-big">
+        ${exp} an(s)
+      </div>
+
+    </div>
+
+    <div class="pcard">
+
+      <div class="pcard-title">
+        Compétences
+      </div>
+
+      <div class="chips-list">
+        ${chips}
+      </div>
+
+    </div>
+  `;
+}
+
+// ===============================
+// OPEN EDIT
+// ===============================
+function openEdit() {
+  const p = currentProfil;
+
+  document.getElementById("e-tel").value = p.telephone || "";
+
+  document.getElementById("e-ville").value = p.ville || "";
+
+  document.getElementById("e-poste").value = p.poste || "";
+
+  document.getElementById("e-bio").value = p.bio || "";
+
+  document.getElementById("e-niveau").value = p.niveau || "";
+
+  document.getElementById("e-entreprise").value = p.entreprise || "";
+
+  document.getElementById("exp-slider").value = p.experience || 0;
+
+  updateSlider(p.experience || 0);
+
+  // compétences
+  skills = p.competences
+    ? p.competences
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const box = document.getElementById("skills-box");
+
+  const inp = document.getElementById("chip-inp");
+
+  Array.from(box.children).forEach((c) => {
+    if (c !== inp) c.remove();
+  });
+
+  skills.forEach((s) => renderChip(s));
+
+  document.getElementById("profil-view").style.display = "none";
+
+  document.getElementById("edit-view").style.display = "block";
+}
+
+// ===============================
+// CANCEL EDIT
+// ===============================
+function cancelEdit() {
+  document.getElementById("edit-view").style.display = "none";
+
+  document.getElementById("profil-view").style.display = "block";
+}
+
+// ===============================
+// SLIDER
 // ===============================
 function updateSlider(value) {
   document.getElementById("exp-num").textContent = value;
+
   document.getElementById("track-fill").style.width = value * 5 + "%";
 
-  let level = "Junior";
-  if (value >= 3) level = "Intermédiaire";
-  if (value >= 6) level = "Senior";
-  if (value >= 10) level = "Expert";
-
-  document.getElementById("exp-unit").textContent = level;
+  document.getElementById("exp-unit").textContent = getLevel(value);
 }
 
 // ===============================
-// SKILLS
+// CHIPS
 // ===============================
 function addChip(e) {
   if (e.key !== "Enter") return;
+
   e.preventDefault();
 
-  const input = document.getElementById("chip-inp");
-  const value = input.value.trim();
-  if (!value) return;
+  const inp = document.getElementById("chip-inp");
 
-  skills.push(value);
-  renderChip(value);
-  input.value = "";
+  const val = inp.value.trim();
+
+  if (!val) return;
+
+  skills.push(val);
+
+  renderChip(val);
+
+  inp.value = "";
 }
 
 function renderChip(value) {
   const chip = document.createElement("div");
+
   chip.className = "chip";
 
   chip.innerHTML = `
     ${value}
-    <span onclick="removeChip('${value}', this)">×</span>
+    <button
+      type="button"
+      onclick="removeChip('${value}', this)">
+      ×
+    </button>
   `;
 
-  const input = document.getElementById("chip-inp");
-  document.getElementById("skills-box").insertBefore(chip, input);
+  document
+    .getElementById("skills-box")
+    .insertBefore(chip, document.getElementById("chip-inp"));
 }
 
 function removeChip(skill, el) {
   skills = skills.filter((s) => s !== skill);
+
   el.parentElement.remove();
 }
 
 // ===============================
-// SUBMIT PROFIL (IMPORTANT)
+// SAVE PROFILE
 // ===============================
-async function submitProfile() {
-  const exp = parseInt(document.getElementById("exp-slider").value);
-
-  let level = "Junior";
-  if (exp >= 3) level = "Intermédiaire";
-  if (exp >= 6) level = "Senior";
-  if (exp >= 10) level = "Expert";
-
-  const candidat = {
+async function saveProfile() {
+  const updated = {
     userId: session.id,
-    prenom: session.prenom,
-    nom: session.nom,
 
-    telephone: document.getElementById("f-tel").value,
-    ville: document.getElementById("f-ville").value,
-    poste: document.getElementById("f-poste").value,
-    bio: document.getElementById("f-bio").value,
+    prenom: currentProfil.prenom,
 
-    experience: exp,
-    niveau: document.getElementById("f-niveau").value,
-    entreprise: document.getElementById("f-entreprise").value,
+    nom: currentProfil.nom,
+
+    telephone: document.getElementById("e-tel").value.trim(),
+
+    ville: document.getElementById("e-ville").value.trim(),
+
+    poste: document.getElementById("e-poste").value.trim(),
+
+    bio: document.getElementById("e-bio").value.trim(),
+
+    experience: parseInt(document.getElementById("exp-slider").value),
+
+    niveau: document.getElementById("e-niveau").value,
+
+    entreprise: document.getElementById("e-entreprise").value.trim(),
 
     competences: skills.join(", "),
-
-    cvPath: "",
-    lettrePath: "",
   };
 
   try {
-    const res = await fetch(`${API_URL}/candidats`, {
-      method: "POST",
+    const res = await fetch(`${API_URL}/candidats/${session.id}`, {
+      method: "PUT",
+
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(candidat),
+
+      body: JSON.stringify(updated),
     });
 
     if (res.ok) {
-      showToast("Profil enregistré avec succès");
+      currentProfil = {
+        ...currentProfil,
+        ...updated,
+      };
 
-      document.getElementById("step3").style.display = "none";
-      document.getElementById("step-success").style.display = "block";
+      renderProfil(currentProfil);
 
-      document.getElementById("succ-pill").textContent =
-        `✦ ${exp} an${exp > 1 ? "s" : ""} · ${level}`;
+      cancelEdit();
+
+      showToast("Profil mis à jour");
     } else {
-      showToast("Erreur lors de l'enregistrement");
+      const err = await res.text();
+
+      console.log(err);
+
+      showToast("Erreur lors de la mise à jour");
     }
   } catch (err) {
     console.log(err);
+
     showToast("Erreur serveur");
   }
 }
 
 // ===============================
-// DOWNLOAD
+// HELPERS
 // ===============================
-function downloadFile(name) {
-  alert("Téléchargement : " + name);
+function getLevel(exp) {
+  if (exp >= 10) return "Expert";
+
+  if (exp >= 6) return "Senior";
+
+  if (exp >= 3) return "Intermédiaire";
+
+  return "Junior";
 }
 
-function downloadProfileTxt() {
-  const text = `
-POSTEJOB - PROFIL
+function renderNoProfil() {
+  document.getElementById("profil-view").innerHTML = `
+    <div class="no-profil">
 
-Nom: ${session.nom}
-Prénom: ${session.prenom}
+      <h2>
+        Profil introuvable
+      </h2>
 
-Compétences:
-${skills.join(", ")}
+      <p>
+        Aucun profil trouvé.
+      </p>
+
+    </div>
   `;
-
-  const blob = new Blob([text], { type: "text/plain" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "profil.txt";
-  a.click();
 }
 
-// ===============================
-// LOGOUT
-// ===============================
 function logout() {
   localStorage.removeItem("pj_session");
+
   window.location.href = "index.html";
 }
 
-// ===============================
-// TOAST
-// ===============================
-function showToast(message) {
+function showToast(msg) {
   const toast = document.getElementById("toast");
-  const msg = document.getElementById("toast-msg");
 
-  msg.textContent = message;
+  document.getElementById("toast-msg").textContent = msg;
+
   toast.classList.add("show");
 
   setTimeout(() => {
     toast.classList.remove("show");
   }, 3000);
 }
+
+// ===============================
+// START
+// ===============================
+loadProfil();
